@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<input type="text" id="vvod">
+<button>Разложить</button>
+<p id="otvet"></p>
+<p id="otvet2"></p>
+ 
+<script>
+// Получаем доступ к кнопке
+var button = document.querySelector("button");
+ 
+function SpaceFormat( n , e ) {
+    var r = '';
+  for(var i=n.length-e; i>=0; i-= e) {
+    r = ' ' + n.substr(i,e) + r;    
+  }
+    r = n.substr(0,i + e) + r;
+  return r;
+}
+ 
+button.onclick = function () {
+  // Получаем введённое число
+  var num = Math.abs(parseInt(document.querySelector("#vvod").value));
+  if (!num) num = 0;
+ 
+  // Преобразуем число в строку
+  var sNum = String(num);
+ 
+  // Преобразуем строку в массив цифв
+  sNum = sNum.match(/\d/g);
+ 
+  // Реверсируем массив
+  sNum = sNum.reverse();
+ 
+  var zero = "";
+  var temp = [];
+ 
+  // Раскладываем число на разрядные слагаемые
+  for (var i = 0; i < sNum.length; i++) {
+    temp[i] = sNum[i] + " &middot; 1";
+    for (var j = 0; j < i; j++) {
+      zero += 0;
+    }
+    
+    zero = SpaceFormat(zero , 3);
+    
+    if (i != 0) {
+      temp[i] += zero + " + ";
+      zero = "";
+    }
+    else {
+      temp[i] += zero;
+      zero = "";
+    }
+  }
+ 
+  var str = "";
+  temp = temp.reverse();
+ 
+  for (var i = 0; i < temp.length; i++)
+    str += temp[i];
+ 
+  str = num + " = " + str;
+ 
+  // Раскладываем число на разрядные слагаемые - второй сопсоб
+  temp = [];
+  zero = "";
+  for (var i = 0; i < sNum.length; i++) {
+    temp[i] = sNum[i];
+    for (var j = 0; j < i; j++) {
+      zero += 0;
+    }
+ 
+    zero = SpaceFormat(zero , 3);
+    
+    if (i != 0) {
+      temp[i] += zero + ' + ';
+      zero = "";
+    }
+    else {
+      temp[i] += zero;
+      zero = "";
+    }
+  }
+ 
+  var str2 = "";
+  temp = temp.reverse();
+ 
+  for (var i = 0; i < temp.length; i++) {
+    if (!temp[i].search(/0/)) continue;
+    str2 += temp[i];
+  }
+ 
+ 
+ 
+  // Получаем доступ к ответу
+  var otvet = document.querySelector("#otvet");
+ 
+  // Выводим ответ
+  otvet.innerHTML = str + " = " + str2;
+};
+</script>
+</body>
+</html>
